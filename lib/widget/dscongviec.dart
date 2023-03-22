@@ -7,16 +7,16 @@ import 'package:b/main.dart';
 class CongViecList extends StatefulWidget {
   final List<Congviec> danhSachCongviec;
   final Function(int) onDelete;
-
   CongViecList(this.danhSachCongviec, this.onDelete);
-
   @override
   _CongViecListState createState() => _CongViecListState();
 }
 
 class _CongViecListState extends State<CongViecList> {
+  //hàm trả về gtri true khi thời gian truyền vào đã quá ngày so với thời gian hiện tại
   bool isOverdue(DateTime date) {
-    return date.isBefore(DateTime.now());
+    DateTime now = DateTime.now();
+    return date.isBefore(now);
   }
 
   @override
@@ -24,22 +24,28 @@ class _CongViecListState extends State<CongViecList> {
     return Container(
       height: 550,
       child: SingleChildScrollView(
+        //cuộn
         child: Column(
           children: widget.danhSachCongviec.map((cv) {
-            int index = widget.danhSachCongviec.indexOf(cv);
+            //ánh xạ map
+            int index = widget.danhSachCongviec.indexOf(cv); //ĩndex
             Color tileColor =
-                isOverdue(cv.deadline) ? Colors.red : Colors.white;
+                isOverdue(cv.deadline) ? Colors.red : Colors.white; //chọn màu
             return Container(
               //giãn cách giữa các công việc
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              margin: EdgeInsets.only(bottom: 10),
+              padding:
+                  EdgeInsets.symmetric(horizontal: 16.0), //giãn hai bên sườn
+              margin: EdgeInsets.only(bottom: 10), //giãn dưới
               child: ListTile(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20)),
-                tileColor: tileColor,
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 6, horizontal: 12),
+                    // hình vuông
+                    borderRadius: BorderRadius.circular(20)), //bo góc hình tròn
+                tileColor: tileColor, //màu
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 6,
+                    horizontal: 12), //khoảng cách theo chiều dọc và nagng
                 leading: Container(
+                  // ô chứa id
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(
                         0), // đặt bán kính là 0 để tạo hình vuông
@@ -53,7 +59,7 @@ class _CongViecListState extends State<CongViecList> {
                   width: 40, // đặt chiều rộng là 50 để tạo hình vuông
                   height: 40,
                   child: Text(
-                    cv.id.toStringAsFixed(0),
+                    cv.id.toStringAsFixed(0), //số số sau dấu.
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -80,7 +86,8 @@ class _CongViecListState extends State<CongViecList> {
                       fontWeight: FontWeight.bold),
                 ),
                 trailing: Container(
-                  padding: EdgeInsets.all(0),
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.all(0), //cách đều
                   margin: EdgeInsets.symmetric(vertical: 6),
                   height: 35,
                   width: 35,
@@ -89,6 +96,7 @@ class _CongViecListState extends State<CongViecList> {
                     borderRadius: BorderRadius.circular(5),
                   ),
                   child: IconButton(
+                    //icon thùng rác
                     color: Colors.white,
                     iconSize: 18,
                     icon: Icon(Icons.delete),

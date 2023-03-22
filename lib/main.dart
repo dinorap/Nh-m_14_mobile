@@ -26,17 +26,18 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-final dateFormat = DateFormat('dd/MM/yyyy');
+final dateFormat = DateFormat('dd/MM/yyyy'); //ép kiểu cho ngày tháng
 
 class _MyHomePageState extends State<MyHomePage> {
-  TextEditingController _searchController = TextEditingController();
+  TextEditingController _searchController =
+      TextEditingController(); //khai báo đối search
   List<Congviec> _filteredCongViec = [];
   final List<Congviec> danhSachCongviec = [
     Congviec(
       id: 1,
       tencv: 'Dự án C#',
       motacv: 'Hoàn thành 50%',
-      deadline: dateFormat.parse('24/06/2023'),
+      deadline: dateFormat.parse('24/06/2023'), // ép kiểu
     ),
     Congviec(
       id: 2,
@@ -48,32 +49,38 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    //sao chép hết nội dung của danh sách cv
     _filteredCongViec.addAll(danhSachCongviec);
-    super.initState();
+    super.initState(); //gọi
   }
 
   @override
   void dispose() {
+    // được sử dụng để giải phóng tài nguyên của _searchController
     _searchController.dispose();
     super.dispose();
   }
 
   void _filterCongViec(String query) {
-    List<Congviec> filteredCongViec = [];
+    List<Congviec> filteredCongViec = []; //copy
     filteredCongViec.addAll(danhSachCongviec);
 
     if (query.isNotEmpty) {
-      filteredCongViec.retainWhere((congViec) =>
-          congViec.tencv.toLowerCase().contains(query.toLowerCase()));
+      //nếu query không rỗng
+      filteredCongViec.retainWhere((congViec) => //duyệt từng phần tử
+          congViec.tencv.toLowerCase().contains(query
+              .toLowerCase())); //chuyển về chữ thường duyệt phần tử xem có giống query
     }
 
     setState(() {
-      _filteredCongViec.clear();
-      _filteredCongViec.addAll(filteredCongViec);
+      _filteredCongViec.clear(); //xóa hết các phần tử cũ
+      _filteredCongViec.addAll(filteredCongViec); //copy tất cả
     });
   }
 
-  void addNewCongviec(String tencv, String motacv, String deadline) {
+  void addNewCongviec(
+      String tencv, String motacv, String deadline) //thêm phần tử
+  {
     final dateFormat = DateFormat('dd/MM/yyyy');
     final newCongviec = Congviec(
       id: danhSachCongviec.length + 1,
@@ -89,9 +96,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void deleteCongViec(int index) {
     setState(() {
-      danhSachCongviec.removeAt(index);
+      danhSachCongviec.removeAt(index); //xóa id
       _filteredCongViec.removeAt(index);
       for (int i = index; i < danhSachCongviec.length; i++) {
+        //giảm id mỗi cái sau vị trí đi 1
         danhSachCongviec[i].id--;
       }
     });
@@ -99,6 +107,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void startAddNewCongviec(BuildContext context) {
     showModalBottomSheet(
+      //cửa sổ hiển thị từ dưới lên hiển thị chỗ nhập dữ liệu
       context: context,
       builder: (_) {
         return GestureDetector(
@@ -145,6 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       //nút drawer
       drawer: Drawer(
+        //thanh chức năng
         child: SafeArea(
           child: Column(
             children: <Widget>[
@@ -170,6 +180,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Text("Danh sách công việc chưa đến hạn"),
                 onPressed: () {
                   setState(() {
+                    // Kết quả của phương thức where là một Iterable chứa các phần tử của danh sách danhSachCongviec thỏa mãn điều kiện trên.Cuối cùng, phương thức toList() được gọi để chuyển đổi Iterable sang List
                     _filteredCongViec = danhSachCongviec
                         .where((congViec) =>
                             congViec.deadline.isAfter(DateTime.now()))
@@ -214,11 +225,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
               ),
               onChanged: (value) {
+                //. Khi người dùng nhập hoặc thay đổi dữ liệu trong Textfield, hàm _filterCongViec(value) sẽ được gọi với giá trị mới của Textfield là tham số đầu vào.
                 _filterCongViec(value);
               },
             ),
           ),
           Expanded(
+            //tự điều chỉnh kích cỡ
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
@@ -230,7 +243,9 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      //nút thêm dữ liệu
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerFloat, //căn giữa
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
         onPressed: () => startAddNewCongviec(context),

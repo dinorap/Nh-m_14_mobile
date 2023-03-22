@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Newcv extends StatefulWidget {
-  final Function addcv;
+  final Function addcv; //thêm widget
 
   Newcv(this.addcv);
 
@@ -11,14 +11,16 @@ class Newcv extends StatefulWidget {
 }
 
 class _NewcvState extends State<Newcv> {
-  final tenControl = TextEditingController();
+  final tenControl =
+      TextEditingController(); //khai báo đối tượng text editing để lưu trữ giá trị người dùng nhập vào
   final motacontrol = TextEditingController();
   final ngaythangcontrol = TextEditingController();
   void submitData() {
-    final enten = tenControl.text;
+    final enten = tenControl.text; //lấy giá trị người dùng nhập vào bằng .text
     final enmota = motacontrol.text;
     final enngaythang = ngaythangcontrol.text;
-    if (enten.isEmpty || enmota.isEmpty || enngaythang.isEmpty) return;
+    if (enten.isEmpty || enmota.isEmpty || enngaythang.isEmpty)
+      return; // nếu 1 trong những thuộc tính trống thì ko thực hiện
 
     widget.addcv(
       enten,
@@ -26,35 +28,39 @@ class _NewcvState extends State<Newcv> {
       enngaythang,
     );
 
-    Navigator.of(context).pop();
+    Navigator.of(context)
+        .pop(); //khi ấn thêm dữ liệu nó sẽ quay lại màn hình menu
   }
 
-  DateTime currentDate = DateTime.now();
+  DateTime currentDate = DateTime.now(); //lấy thời gian hiện tại
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      // cart và các thuộc tính
+      elevation: 5, // độ sâu của card
+
       child: Container(
-        height: 1000,
-        padding: EdgeInsets.all(10),
+        height: 700,
+        padding: EdgeInsets.all(10), //cách đều các dối tượng
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center, //căn giữa
           children: <Widget>[
             TextField(
-              decoration: InputDecoration(labelText: 'Tên công việc'),
-              controller: tenControl,
-              onSubmitted: (_) => submitData(),
+              decoration: InputDecoration(
+                  labelText: 'Tên công việc'), //đặt nhãn cho textfile
+              controller: tenControl, //kết nối textfile với tencontrol
+              onSubmitted: (_) => submitData(), //ấn vào thì thực hiện lệnh
             ),
             TextField(
               decoration: InputDecoration(labelText: 'Mô tả công việc'),
               controller: motacontrol,
               onSubmitted: (_) => submitData(),
             ),
-            TextField( 
+            TextField(
               decoration:
                   InputDecoration(labelText: 'Thời hạn hoàn thành(DeadLine)'),
               controller: ngaythangcontrol,
-              readOnly: true,//ko hien bàn phím
+              readOnly: true, //ko hien bàn phím
               onTap: () async {
                 // Hiển thị picker ngày tháng năm khi người dùng chọn trường này
                 final DateTime? pickedDate = await showDatePicker(
